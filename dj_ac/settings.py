@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'dj_ac.wsgi.application'
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',   # Используется PostgreSQL
-#         'NAME': os.environ.get('POSTGRES_DB'),  # Имя базы данных
-#         'USER': os.environ.get('POSTGRES_USER'),  # Имя пользователя
-#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),  # Пароль пользователя
-#         'HOST': os.environ.get('POSTGRES_HOST'),  # Наименование контейнера для базы данных в Docker Compose
-#         'PORT': os.environ.get('POSTGRES_PORT'),  # Порт базы данных
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('POSTGRES_DB'),
+#         'USER': os.environ.get('POSTGRES_USER'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+#         'HOST': os.environ.get('POSTGRES_HOST'),
+#         'PORT': os.environ.get('POSTGRES_PORT'),
 #     }
 # }
 

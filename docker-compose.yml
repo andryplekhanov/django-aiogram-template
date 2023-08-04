@@ -14,8 +14,8 @@ services:
     restart: always
     env_file:
       - ".env"
-    networks:
-    - tg_bot
+#    networks:
+#    - tg_bot
     depends_on:
       - web
 
@@ -30,38 +30,52 @@ services:
     ports:
       - 8000:8000
     restart: always
-    depends_on:
-      db:
-        condition: service_healthy
+#    depends_on:
+#      db:
+#        condition: service_healthy
     env_file: .env
+#    links:
+#      - db:db
+    networks:
+      - djangonetwork
 
-  db:
-    image: postgres:15.0-alpine
-    volumes:
-      - ./postgres_db/postgres/postgresql-data:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 10s
-      retries: 10
-    restart: unless-stopped
-    container_name: ${BOT_NAME}-db
-    env_file: .env
-    ports:
-      - 5432:5432
-    command:
-      - "postgres"
-      - "-c"
-      - "log_destination=stderr"
-      - "-c"
-      - "logging_collector=on"
-      - "-c"
-      - "log_directory=/var/lib/postgresql/data/pg_log"
-      - "-c"
-      - "work_mem=16MB"
-      - "-c"
-      - "maintenance_work_mem=512MB"
+#  db:
+#    image: postgres:15.0-alpine
+#    volumes:
+#      - ./postgres_db/postgres/postgresql-data:/var/lib/postgresql/data
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+#      interval: 10s
+#      timeout: 10s
+#      retries: 10
+#    restart: unless-stopped
+#    container_name: db
+#    networks:
+#      - djangonetwork
+#    env_file: .env
+#    ports:
+#      - 5433:5432
+#    command:
+#      - "postgres"
+#      - "-c"
+#      - "log_destination=stderr"
+#      - "-c"
+#      - "logging_collector=on"
+#      - "-c"
+#      - "log_directory=/var/lib/postgresql/data/pg_log"
+#      - "-c"
+#      - "work_mem=16MB"
+#      - "-c"
+#      - "maintenance_work_mem=512MB"
+
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8080:8080
 
 networks:
-  tg_bot:
+  djangonetwork:
     driver: bridge
+#  tg_bot:
+#    driver: bridge
