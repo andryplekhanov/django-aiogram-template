@@ -49,6 +49,7 @@ async def main():
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
     )
     logger.info("Starting bot")
+    setup_django()
     config = load_config(".env")
 
     storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
@@ -63,7 +64,6 @@ async def main():
 
     # start
     try:
-        setup_django()
         await dp.start_polling()
     finally:
         await dp.storage.close()

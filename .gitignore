@@ -65,3 +65,4 @@ venv.bak/
 
 # Database
 postgres_db/
+db.sqlite3
