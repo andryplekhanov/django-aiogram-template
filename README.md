@@ -11,6 +11,7 @@ cat .env.dist > .env
 
 docker-compose build
 docker-compose up -d
+docker-compose down
 ```
 
 ## Database migrations
@@ -19,4 +20,6 @@ docker-compose up -d
 docker-compose exec web sh -c "python manage.py makemigrations"
 # run migrations
 docker-compose exec web sh -c "python manage.py migrate"
+# create superuser
+docker-compose exec web sh -c "python manage.py createsuperuser"
 ```
