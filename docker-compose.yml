@@ -1,21 +1,23 @@
 version: '3.9'
 
 services:
-#  bot:
-#    container_name: ${PROJECT_NAME}-bot
-#    build:
-#      dockerfile: Dockerfile.bot
-#      context: .
-#    working_dir: "/usr/src/app/${BOT_NAME:-tg_bot}"
-#    stop_signal: SIGINT
-#    volumes:
-#      - .:/usr/src/app/${BOT_NAME:-tg_bot}
-##    command: python3 src/bot.py
-#    restart: always
-#    depends_on:
-#      - web
-#      - db
-#    env_file: .env
+  bot:
+    image: "${BOT_IMAGE_NAME:-tg_bot-image}"
+    container_name: ${BOT_CONTAINER_NAME}-bot
+    stop_signal: SIGINT
+    build:
+      context: .
+    working_dir: "/usr/src/app/"
+    volumes:
+    - .:/usr/src/app/
+    command: python bot.py
+    restart: always
+    env_file:
+      - ".env"
+    networks:
+    - tg_bot
+    depends_on:
+      - web
 
   web:
     container_name: ${BOT_CONTAINER_NAME}-web
@@ -59,5 +61,7 @@ services:
       - "work_mem=16MB"
       - "-c"
       - "maintenance_work_mem=512MB"
-volumes:
-  postgres_data:
+
+networks:
+  tg_bot:
+    driver: bridge

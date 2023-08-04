@@ -1,12 +1,13 @@
 FROM python:3.10-slim-buster
-WORKDIR /usr/src/app
 
+# переменные окружения для python
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY requirements.txt .
+# устанавливаем зависимости
+RUN pip install --no-cache-dir --upgrade pip
+COPY ./requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --no-cache-dir --upgrade pip  \
-    && pip install --no-cache-dir -r ./requirements.txt
-
+# копируем содержимое текущей папки в контейнер
 COPY . .
