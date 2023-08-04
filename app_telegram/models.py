@@ -18,7 +18,7 @@ class TGUser(TimeBasedModel):
     # user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('пользователь'))
     tg_id = models.BigIntegerField(unique=True, db_index=True, verbose_name=_('id Telegram'))
     username = models.CharField(unique=True, max_length=255, verbose_name=_('username в Telegram'))
-    fullname = models.CharField(max_length=255, verbose_name=_('ФИО в Telegram'))
+    fullname = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('ФИО в Telegram'))
     phone_regex = RegexValidator(regex=r'^\+\d{11,20}',
                                  message=_("The phone number must be specified in the following format: '+79012345678'."))
     phone_number = models.CharField(validators=[phone_regex], max_length=20, blank=True,

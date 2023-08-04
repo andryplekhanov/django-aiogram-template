@@ -5,12 +5,8 @@ from tgbot.models.commands import add_user
 
 
 async def user_start(message: Message):
-    await message.answer('hello')
     user = await add_user(message.from_user.id, message.from_user.full_name, message.from_user.username)
-    if user:
-        await message.answer('hello')
-    else:
-        await message.answer('wtf')
+    await message.answer(f'hello, {user.username}')
 
 
 def register_user(dp: Dispatcher):
