@@ -1,9 +1,5 @@
 # django-aiogram-template
 
-## Stack
-Python, Aiogram, Django,
-Docker, PostgreSQL
-
 ## Setup
 ```bash
 cat .env.dist > .env
@@ -11,6 +7,8 @@ cat .env.dist > .env
 
 docker-compose build
 docker-compose up -d
+
+# to stop
 docker-compose down
 ```
 
