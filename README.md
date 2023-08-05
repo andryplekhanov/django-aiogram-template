@@ -21,3 +21,11 @@ docker-compose exec web sh -c "python manage.py migrate"
 # create superuser
 docker-compose exec web sh -c "python manage.py createsuperuser"
 ```
+
+## Adminer
+Visit http://localhost:8080/ to connect to your database.
+- System: PostgreSQL
+- Server: db
+- Username: postgres
+- Password: postgres
+- Database: template-db

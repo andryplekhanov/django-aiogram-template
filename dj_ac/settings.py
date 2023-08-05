@@ -28,7 +28,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get('DEBUG', default=0))
+DEBUG = bool(os.environ.get("DEBUG"))
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(',')
 
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.postgres',
+    # 'django.contrib.postgres',
 
     'app_telegram.apps.AppTelegramConfig',
 
@@ -82,23 +82,30 @@ WSGI_APPLICATION = 'dj_ac.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('POSTGRES_DB'),
-#         'USER': os.environ.get('POSTGRES_USER'),
-#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-#         'HOST': os.environ.get('POSTGRES_HOST'),
-#         'PORT': os.environ.get('POSTGRES_PORT'),
-#     }
-# }
+POSTGRES_DB = os.environ.get('POSTGRES_DB')
+POSTGRES_USER = os.environ.get('POSTGRES_USER')
+POSTGRES_PASS = os.environ.get('POSTGRES_PASSWORD')
+POSTGRES_HOST = "db"
+POSTGRES_PORT = 5432
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': POSTGRES_DB,
+        'USER': POSTGRES_USER,
+        'PASSWORD': POSTGRES_PASS,
+        'HOST': POSTGRES_HOST,
+        'PORT': POSTGRES_PORT,
+        'ATOMIC_REQUESTS': True,
+    },
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -140,3 +147,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# REDIS
+REDIS_HOST = os.environ.get('REDIS_HOST')
+REDIS_PORT = int(os.environ.get('REDIS_PORT'))
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')

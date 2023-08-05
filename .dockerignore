@@ -11,7 +11,8 @@
 
 # Docker
 docker-compose.yml
-Dockerfile
+Dockerfile.bot
+Dockerfile.web
 .docker
 .dockerignore
 

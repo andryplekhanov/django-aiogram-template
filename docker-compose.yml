@@ -2,80 +2,64 @@ version: '3.9'
 
 services:
   bot:
-    image: "${BOT_IMAGE_NAME:-tg_bot-image}"
-    container_name: ${BOT_CONTAINER_NAME}-bot
-    stop_signal: SIGINT
+    container_name: ${PROJECT_NAME}-bot
     build:
+      dockerfile: Dockerfile.bot
       context: .
-    working_dir: "/usr/src/app/"
+    working_dir: "/usr/src/app/${BOT_NAME:-tg_bot}"
     volumes:
-    - .:/usr/src/app/
+      - .:/usr/src/app/${BOT_NAME:-tg_bot}
     command: python bot.py
     restart: always
-    env_file:
-      - ".env"
-#    networks:
-#    - tg_bot
     depends_on:
+      - db
+      - redis
       - web
+    env_file: .env
 
   web:
-    container_name: ${BOT_CONTAINER_NAME}-web
+    container_name: ${PROJECT_NAME}-web
     build:
+      dockerfile: Dockerfile.web
       context: .
-    working_dir: "/usr/src/app/"
+    working_dir: "/usr/src/app/${PROJECT_NAME:-web}"
     volumes:
-      - .:/usr/src/app/
+      - .:/usr/src/app/${PROJECT_NAME:-web}
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     restart: always
-#    depends_on:
-#      db:
-#        condition: service_healthy
+    depends_on:
+      - db
+      - redis
     env_file: .env
-#    links:
-#      - db:db
-    networks:
-      - djangonetwork
 
-#  db:
-#    image: postgres:15.0-alpine
-#    volumes:
-#      - ./postgres_db/postgres/postgresql-data:/var/lib/postgresql/data
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-#      interval: 10s
-#      timeout: 10s
-#      retries: 10
-#    restart: unless-stopped
-#    container_name: db
-#    networks:
-#      - djangonetwork
-#    env_file: .env
-#    ports:
-#      - 5433:5432
-#    command:
-#      - "postgres"
-#      - "-c"
-#      - "log_destination=stderr"
-#      - "-c"
-#      - "logging_collector=on"
-#      - "-c"
-#      - "log_directory=/var/lib/postgresql/data/pg_log"
-#      - "-c"
-#      - "work_mem=16MB"
-#      - "-c"
-#      - "maintenance_work_mem=512MB"
+  db:
+    image: postgres:15.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    container_name: ${PROJECT_NAME}-db
+    env_file: .env
+    ports:
+      - 5433:5432
 
-#  adminer:
-#    image: adminer
-#    restart: always
-#    ports:
-#      - 8080:8080
+  redis:
+    image: redis:7.2-rc3-alpine
+    container_name: ${PROJECT_NAME}-redis
+    restart: always
+    ports:
+      - 6380:6379
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
 
-networks:
-  djangonetwork:
-    driver: bridge
-#  tg_bot:
-#    driver: bridge
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data:
+  redis_data:

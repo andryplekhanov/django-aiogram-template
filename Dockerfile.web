@@ -1,0 +1,12 @@
+FROM python:3.10-slim-buster
+
+ENV PROJECT_NAME=$PROJECT_NAME
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /usr/src/app/"${PROJECT_NAME:-web}"
+
+COPY requirements.txt /usr/src/app/"${PROJECT_NAME:-web}"
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r /usr/src/app/"${PROJECT_NAME:-web}"/requirements.txt
+COPY . /usr/src/app/"${PROJECT_NAME:-web}"
