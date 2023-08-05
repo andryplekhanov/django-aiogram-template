@@ -1,29 +1,38 @@
 # django-aiogram-template
 
-## Setup
+Шаблон для создания Telegram-бота на AIOgram с админкой Django.
+
+
+## Запуск
+- скачайте проект
+- файл ".env.dist" переименуйте в ".env" и пропишите необходимые настройки
+- выполните команды (должен быть запущен Docker):
 ```bash
-cat .env.dist > .env
-# change values in .env
-
+# смонтировать контейнер:
 docker-compose build
+# запустить контейнер:
 docker-compose up -d
-
-# to stop
+# остановить контейнер:
 docker-compose down
+# если в код были внесены изменения, необходимо заново смонтировать контейнер
 ```
 
-## Database migrations
+
+## Миграции
+Команды выполняются при запущенном контейнере
 ```bash
-# to make new migration files
+# создание миграций
 docker-compose exec web sh -c "python manage.py makemigrations"
-# run migrations
+# применение миграций
 docker-compose exec web sh -c "python manage.py migrate"
-# create superuser
+# создание суперпользователя
 docker-compose exec web sh -c "python manage.py createsuperuser"
 ```
 
-## Adminer
-Visit http://localhost:8080/ to connect to your database.
+Теперь можно перейти на http://0.0.0.0:8000/admin/ и войти в админку под суперпользователем
+
+## Просмотр БД через Adminer
+Посетите http://localhost:8080/ и введите следующие параметры:
 - System: PostgreSQL
 - Server: db
 - Username: postgres

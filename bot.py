@@ -1,13 +1,8 @@
-import asyncio
-import django
-import logging
-import os
+import asyncio, django, logging, os
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
-
-from dj_ac import settings
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
@@ -52,7 +47,12 @@ async def main():
     setup_django()
     config = load_config(".env")
 
-    storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
+    storage = RedisStorage2(
+        host=config.redis.host,
+        port=config.redis.port,
+        password=config.redis.password
+    ) if config.tg_bot.use_redis else MemoryStorage()
+
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
 
