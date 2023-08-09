@@ -8,7 +8,7 @@ from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.echo import register_echo
-from tgbot.handlers.user import register_user
+from tgbot.handlers.start import register_user
 from tgbot.middlewares.environment import EnvironmentMiddleware
 
 logger = logging.getLogger(__name__)
@@ -47,11 +47,8 @@ async def main():
     setup_django()
     config = load_config(".env")
 
-    storage = RedisStorage2(
-        host=config.redis.host,
-        port=config.redis.port,
-        password=config.redis.password
-    ) if config.tg_bot.use_redis else MemoryStorage()
+    storage = RedisStorage2(config.redis.host, config.redis.port, db=5, pool_size=10, prefix='bot_fsm') \
+        if config.redis.use_redis else MemoryStorage()
 
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)

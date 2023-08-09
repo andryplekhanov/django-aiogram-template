@@ -45,14 +45,17 @@ services:
       - 5433:5432
 
   redis:
-    image: redis:7.2-rc3-alpine
     container_name: ${PROJECT_NAME}-redis
+    image: redis:7.2-rc3-alpine
     restart: always
+    env_file:
+      - .env
     ports:
-      - 6380:6379
-    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+      - ${REDIS_PORT}:${REDIS_PORT}
+    expose:
+      - ${REDIS_PORT}
     volumes:
-      - redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
 
   adminer:
     image: adminer
